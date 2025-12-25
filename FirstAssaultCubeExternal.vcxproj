@@ -19,10 +19,12 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="cheat.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="proc.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="cheat.h" />
     <ClInclude Include="proc.h" />
   </ItemGroup>
   <ItemGroup>
