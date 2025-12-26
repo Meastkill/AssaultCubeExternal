@@ -1,16 +1,19 @@
 #include <Windows.h>
 #include <iostream>
 #include <TlHelp32.h>
+#include <thread>
+#include <chrono>
 
 #include "cheat.h"
 #include "proc.h"
+#include "overlay.h"
 
 // declerations
 
 bool healthBool = false;
 bool ammoBool = false;
 
-int health = 10000;
+int health = 9999;
 int ammo = 1337;
 
 DWORD pID, baseModule, localPlayerPtr;
@@ -33,28 +36,39 @@ DWORD pID, baseModule, localPlayerPtr;
 		}
 		else
 		{
-			std::cout << "[+] Hooking Failed! Please open Assault Cube\n" << std::endl;
+			std::cout << "[!] Hooking Failed! Open Assault Cube\n\n[+] ";
 			system("pause");
 			exit(EXIT_FAILURE);
 		}
+		return pID && baseModule;
 	}
 
 	void cheat::main()
 	{
-		HANDLE handle = OpenProcess(PROCESS_ALL_ACCESS, NULL, pID);
+			HANDLE handle = OpenProcess(PROCESS_ALL_ACCESS, NULL, pID);
 
-		ReadProcessMemory(handle, (LPCVOID)(baseModule + 0x17E0A8), &localPlayerPtr, sizeof(localPlayerPtr), nullptr);
+			ReadProcessMemory(handle, (LPCVOID)(baseModule + 0x17E0A8), &localPlayerPtr, sizeof(localPlayerPtr), nullptr);
 
-		std::cout << "\n=============================================== Initializing Main Cheat ================================================\n" << std::endl;
+			std::cout << "\n=============================================== Initializing Main Cheat ================================================\n";
 
-		std::cout << "[+] Health overwritten successfully" << std::endl;
-		std::cout << "[+] Ammo overwritten successfully" << std::endl;
+			// start External Overlay
 
-		while (true)
-		{
-			WriteProcessMemory(handle, (LPVOID)(localPlayerPtr + 0xEC), &health, sizeof(health), nullptr); // health overwrite
+			std::thread overlayThread([]()
+				{
+					HINSTANCE instance = GetModuleHandleW(nullptr);
+					RunOverlay(instance, SW_SHOW);
+				});
 
-			WriteProcessMemory(handle, (LPVOID)(localPlayerPtr + 0x140), &ammo, sizeof(ammo), nullptr); // rifle ammo overwrite
-			WriteProcessMemory(handle, (LPVOID)(localPlayerPtr + 0x12C), &ammo, sizeof(ammo), nullptr); // pistol ammo overwrite
-		}
+			overlayThread.detach();
+
+			std::cout << "[+] Health overwritten successfully" << std::endl;
+			std::cout << "[+] Ammo overwritten successfully" << std::endl;
+
+			while (true)
+			{
+				WriteProcessMemory(handle, (LPVOID)(localPlayerPtr + 0xEC), &health, sizeof(health), nullptr); // health overwrite
+
+				WriteProcessMemory(handle, (LPVOID)(localPlayerPtr + 0x140), &ammo, sizeof(ammo), nullptr); // rifle ammo overwrite
+				WriteProcessMemory(handle, (LPVOID)(localPlayerPtr + 0x12C), &ammo, sizeof(ammo), nullptr); // pistol ammo overwrite
+			}
 	}

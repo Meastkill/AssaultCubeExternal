@@ -8,5 +8,4 @@ class cheat
 public:
 	static int hook();
 	static void main();
-	static void setup();
 };
