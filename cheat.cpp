@@ -10,7 +10,7 @@
 bool healthBool = false;
 bool ammoBool = false;
 
-int health = 10000;
+int health = 9999;
 int ammo = 1337;
 
 DWORD pID, baseModule, localPlayerPtr;
