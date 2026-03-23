@@ -14,7 +14,9 @@ bool healthBool = false;
 bool ammoBool = false;
 
 int health = 9999;
+int armor = 100;
 int ammo = 1337;
+int grenadeAmmo = 100;
 
 DWORD pID, baseModule, localPlayerPtr;
 
@@ -61,14 +63,22 @@ DWORD pID, baseModule, localPlayerPtr;
 
 			overlayThread.detach();
 
+			// overwrrite health and ammo
+
 			std::cout << "[+] Health overwritten successfully" << std::endl;
 			std::cout << "[+] Ammo overwritten successfully" << std::endl;
 
 			while (true)
 			{
-				WriteProcessMemory(handle, (LPVOID)(localPlayerPtr + 0xEC), &health, sizeof(health), nullptr); // health overwrite
+				// HEALTH
+				WriteProcessMemory(handle, (LPVOID)(localPlayerPtr + 0xEC), &health, sizeof(health), nullptr); // health
+				WriteProcessMemory(handle, (LPVOID)(localPlayerPtr + 0xF0), &armor, sizeof(armor), nullptr); // health
 
-				WriteProcessMemory(handle, (LPVOID)(localPlayerPtr + 0x140), &ammo, sizeof(ammo), nullptr); // rifle ammo overwrite
-				WriteProcessMemory(handle, (LPVOID)(localPlayerPtr + 0x12C), &ammo, sizeof(ammo), nullptr); // pistol ammo overwrite
+				// AMMO
+				WriteProcessMemory(handle, (LPVOID)(localPlayerPtr + 0x140), &ammo, sizeof(ammo), nullptr); // rifle ammo
+				WriteProcessMemory(handle, (LPVOID)(localPlayerPtr + 0x12C), &ammo, sizeof(ammo), nullptr); // pistol ammo
+				WriteProcessMemory(handle, (LPVOID)(localPlayerPtr + 0x13C), &ammo, sizeof(ammo), nullptr); // Sniper ammo
+				WriteProcessMemory(handle, (LPVOID)(localPlayerPtr + 0x134), &ammo, sizeof(ammo), nullptr); // Shotgun ammo
+				WriteProcessMemory(handle, (LPVOID)(localPlayerPtr + 0x144), &grenadeAmmo, sizeof(grenadeAmmo), nullptr); // Grenade ammo
 			}
 	}
