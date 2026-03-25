@@ -7,6 +7,7 @@
 #include "cheat.h"
 #include "proc.h"
 #include "overlay.h"
+#include "offsets.h"
 
 // declerations
 
@@ -17,6 +18,9 @@ int health = 9999;
 int armor = 100;
 int ammo = 1337;
 int grenadeAmmo = 100;
+
+int playerCount = 0;
+int entityList = 0;
 
 DWORD pID, baseModule, localPlayerPtr;
 
@@ -64,9 +68,16 @@ DWORD pID, baseModule, localPlayerPtr;
 			overlayThread.detach();
 
 			// overwrrite health and ammo
-
 			std::cout << "[+] Health overwritten successfully" << std::endl;
 			std::cout << "[+] Ammo overwritten successfully" << std::endl;
+
+			// entity list
+			ReadProcessMemory(handle, (LPCVOID)(baseModule + offset::uEntityList), &entityList, sizeof(entityList), NULL);
+			std::cout << "\n[+] Entity List: " << std::dec << entityList << std::endl;
+
+			// entity count
+			ReadProcessMemory(handle, (LPCVOID)(offset::uEntityCount), &playerCount, sizeof(playerCount), NULL);
+			std::cout << "\n[+] Playercount is: " << std::dec << playerCount << std::endl;
 
 			while (true)
 			{

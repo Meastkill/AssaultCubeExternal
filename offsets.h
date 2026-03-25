@@ -12,7 +12,7 @@ namespace offset {
 
 
 	const DWORD uEntityList = 0x00191FCC;
-	const DWORD uEntityCount = 0x0058AC0C; // length of entity list 
+	const DWORD uEntityCount = 0x58AC0C; // length of entity list 
 	const DWORD uEntitySize = 0x4; // user defined
 
 	const DWORD eHealth = 0xEC; // 0x4 between every entity

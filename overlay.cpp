@@ -15,6 +15,9 @@
 #pragma comment(lib, "d3d11.lib")
 #pragma comment(lib, "dxgi.lib")
 
+int width = GetSystemMetrics(SM_CXSCREEN);
+int height = GetSystemMetrics(SM_CYSCREEN);
+
 extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
 LRESULT CALLBACK window_procedure(HWND window, UINT message, WPARAM w_param, LPARAM l_param)
@@ -53,8 +56,8 @@ int RunOverlay(HINSTANCE instance, int cmd_show)
         WS_POPUP,
         0,
         0,
-        1920, // TODO: replace with GetSystemMetrics(SM_CXSCREEN)
-        1080, // TODO: replace with GetSystemMetrics(SM_CYSCREEN)
+        width,
+        height,
         nullptr,
         nullptr,
         wc.hInstance,
@@ -223,7 +226,7 @@ int RunOverlay(HINSTANCE instance, int cmd_show)
         ImGui::NewFrame();
 
         // Example draw
-        ImGui::GetBackgroundDrawList()->AddCircleFilled(ImVec2(800.0f, 800.0f), 50.0f, ImColor(1.f, 0.f, 0.f));
+        ImGui::GetBackgroundDrawList()->AddCircle(ImVec2(width/2, height/2), 100.0f, ImColor(1.f, 0.f, 0.f), 100.0f, 1.0f);
 
         ImGui::Render();
 
